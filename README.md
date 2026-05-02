@@ -1,5 +1,9 @@
 # newspaper-daily-skill
 
+<div align="right">
+  <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
+</div>
+
 A Claude skill for generating newspaper-style pages with deep browsing.
 
 It helps turn project updates, daily notes, and topic reports into a full-screen newspaper layout with chained entry navigation.
