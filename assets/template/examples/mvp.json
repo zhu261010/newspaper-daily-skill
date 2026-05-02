@@ -1,0 +1,156 @@
+{
+  "masthead": "NEWSPAPER DAILY SKILL",
+  "issue": "Issue #003",
+  "date": "2026-05-02",
+  "location": "Shenzhen / Remote",
+  "deck": "全屏报纸布局：高信息密度 + 深度钻取，覆盖日报、项目、专题三类内容。",
+  "quickBrief": [
+    "主线项目推进至 Beta",
+    "今日新增 2 个风险项",
+    "专题复盘文档已整理"
+  ],
+  "namingRules": {
+    "daily": "YYYY-MM-DD",
+    "project": "projects/<repo>/index.json",
+    "topic": "topic-<slug>-YYYY-MM-DD.json",
+    "entry": "<domain>-<slug>"
+  },
+  "lead": {
+    "kicker": "Front Page",
+    "title": "报纸日报 Skill 进入全屏高密度展示阶段",
+    "content": "保持统一报纸视觉，不做模式切换；通过分栏强化信息承载，并支持从词条持续下钻。"
+  },
+  "feed": [
+    {
+      "title": "日报命名规则已统一",
+      "summary": "统一日期命名便于归档检索。",
+      "tags": ["daily", "naming"],
+      "entryId": "daily-naming"
+    },
+    {
+      "title": "项目报目录结构固定",
+      "summary": "按仓库名归档，跨项目索引更清晰。",
+      "tags": ["project", "repo"],
+      "entryId": "project-naming"
+    },
+    {
+      "title": "专题词条可链式下钻",
+      "summary": "支持主词条到分支词条逐层展开。",
+      "tags": ["topic", "deep"],
+      "entryId": "deep-guide"
+    },
+    {
+      "title": "移动端单栏阅读增强",
+      "summary": "小屏保留完整信息结构，并保持词条导航可用。",
+      "tags": ["mobile", "ux"],
+      "entryId": "mobile-scenes"
+    }
+  ],
+  "briefs": [
+    "新增全屏四栏排版",
+    "增强移动端触达",
+    "补齐场景模板"
+  ],
+  "agenda": [
+    "完善导出能力",
+    "加入索引首页",
+    "补充模板市场"
+  ],
+  "metrics": [
+    { "label": "今日条目", "value": "18" },
+    { "label": "项目数", "value": "4" },
+    { "label": "风险项", "value": "2" },
+    { "label": "已归档", "value": "27" }
+  ],
+  "timeline": [
+    { "time": "09:30", "event": "晨会同步日报模板进展" },
+    { "time": "11:00", "event": "更新项目风险栏位" },
+    { "time": "15:20", "event": "专题词条链路校验" },
+    { "time": "18:00", "event": "输出当日归档" }
+  ],
+  "project": {
+    "name": "newspaper-daily",
+    "milestones": [
+      "全屏报纸UI",
+      "深度路由",
+      "命名规范"
+    ],
+    "risks": [
+      "深链路径过长",
+      "本地文件权限差异"
+    ],
+    "nextSteps": [
+      "词条搜索",
+      "多报纸索引"
+    ]
+  },
+  "profile": {
+    "name": "Your Name",
+    "role": "Builder / Product Engineer",
+    "email": "you@example.com",
+    "location": "Shenzhen, CN",
+    "links": ["github.com/yourname/newspaper-daily"],
+    "skills": ["Layout", "Deep Browsing", "Knowledge Ops"]
+  },
+  "scenes": [
+    "个人日报：每日复盘与任务跟进",
+    "项目报：里程碑与风险同步",
+    "专题报：事故复盘/竞品研究"
+  ],
+  "stats": {
+    "key": "产品主张",
+    "value": "先全局扫描，再沿链接钻深。"
+  },
+  "entries": [
+    {
+      "id": "daily-naming",
+      "title": "日报命名规则",
+      "content": "采用 YYYY-MM-DD，示例：2026-05-02.json。",
+      "links": [
+        { "targetId": "daily-scenes", "label": "日报场景" }
+      ]
+    },
+    {
+      "id": "project-naming",
+      "title": "项目报命名规则",
+      "content": "目录按仓库名：projects/<repo>/index.json。",
+      "links": [
+        { "targetId": "project-scenes", "label": "项目报场景" }
+      ]
+    },
+    {
+      "id": "deep-guide",
+      "title": "深度钻取机制",
+      "content": "词条跳转 + 面包屑回溯 + 返回上层。",
+      "links": [
+        { "targetId": "topic-scenes", "label": "专题报场景" }
+      ]
+    },
+    {
+      "id": "mobile-scenes",
+      "title": "手机端场景",
+      "content": "移动端适合快速浏览头版、查看今日时间线、在通勤中做词条下钻。",
+      "links": [
+        { "targetId": "deep-guide", "label": "返回深度机制" }
+      ]
+    },
+    {
+      "id": "daily-scenes",
+      "title": "日报场景",
+      "content": "个人日志、团队晨报、值班日报。",
+      "links": []
+    },
+    {
+      "id": "project-scenes",
+      "title": "项目报场景",
+      "content": "里程碑同步、风险追踪、发布简报。",
+      "links": []
+    },
+    {
+      "id": "topic-scenes",
+      "title": "专题场景",
+      "content": "复盘报告、研究汇编、技术选型。",
+      "links": []
+    }
+  ]
+}

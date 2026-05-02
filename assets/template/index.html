@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Newspaper Daily Skill</title>
+  <style>
+    :root {
+      --paper: #f7f2e8;
+      --ink: #161616;
+      --muted: #5f5f5f;
+      --line: #242424;
+      --accent: #8f1f1f;
+      --card: #fffdf7;
+      --link: #1c4f90;
+      --bg: #e6e1d6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #f0ebdf 0%, var(--bg) 56%);
+      color: var(--ink);
+      font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
+      line-height: 1.58;
+      padding: 14px;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .paper {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      background: var(--paper);
+      border: 1px solid #000;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+      padding: 16px 18px 18px;
+      min-height: calc(100vh - 28px);
+    }
+
+    .skill-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #333;
+      background: #f3eee1;
+      padding: 6px 10px;
+      font-size: 13px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .crumbs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .crumb-sep { color: #777; }
+
+    .back-btn {
+      border: 1px solid #333;
+      background: #fff;
+      padding: 4px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .back-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    .nameplate {
+      text-align: center;
+      border-bottom: 3px double var(--line);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .nameplate h1 {
+      margin: 0;
+      font-size: clamp(30px, 3.4vw, 56px);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .deck {
+      font-size: 15px;
+      margin: 10px 0 14px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+
+    .headline-grid {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .lead-card, .quick-card {
+      border: 1px solid #333;
+      background: var(--card);
+      padding: 10px 12px;
+      min-width: 0;
+    }
+
+    .kicker {
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .lead-title { margin: 0 0 8px; font-size: 28px; line-height: 1.25; }
+
+    .quick-card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      border-bottom: 1px dotted #444;
+      padding-bottom: 4px;
+    }
+
+    .quick-card ul { margin: 0; padding-left: 18px; font-size: 14px; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.6fr 1.2fr 1.2fr 1fr;
+      gap: 12px;
+    }
+
+    .col {
+      min-width: 0;
+      border-left: 1px solid #333;
+      padding-left: 10px;
+    }
+
+    .col:first-child { border-left: none; padding-left: 0; }
+
+    .section { margin-bottom: 12px; }
+
+    .section h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      border-bottom: 1px solid #444;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .feed-item {
+      padding: 7px 0;
+      border-top: 1px dotted #444;
+    }
+    .feed-item:first-child { border-top: none; padding-top: 0; }
+    .feed-item h3 { margin: 0 0 4px; font-size: 15px; line-height: 1.35; }
+    .feed-item p { margin: 0; font-size: 13px; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+    .tag {
+      border: 1px solid #333;
+      padding: 1px 8px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: #f3efe6;
+    }
+
+    .list { margin: 0; padding-left: 16px; font-size: 13px; }
+    .list li { margin: 2px 0; }
+
+    .profile, .box {
+      border: 1px solid #333;
+      background: var(--card);
+      padding: 9px;
+    }
+
+    .avatar {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border: 1px dashed #555;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 8px;
+      background: #f7f2e8;
+    }
+
+    .profile dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3px 8px;
+      font-size: 12px;
+    }
+    .profile dt { font-weight: 700; }
+    .profile dd { margin: 0; }
+
+    .entry-view { border-top: 2px double #333; margin-top: 12px; padding-top: 10px; }
+    .entry-card { border: 1px solid #333; background: #fffdf8; padding: 10px 12px; }
+    .entry-links { margin-top: 10px; padding-top: 8px; border-top: 1px dotted #555; }
+    .entry-links ul { margin: 8px 0 0; padding-left: 18px; font-size: 14px; }
+
+    .footer-line {
+      margin-top: 12px;
+      border-top: 2px double #333;
+      padding-top: 8px;
+      font-size: 12px;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1180px) {
+      .layout { grid-template-columns: 1.5fr 1.2fr 1fr; }
+      .col:nth-child(4) { border-left: none; padding-left: 0; grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 10px; }
+      .paper { padding: 12px; min-height: auto; }
+      .headline-grid { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: 1fr; }
+      .col {
+        border-left: none;
+        border-top: 1px solid #333;
+        padding-left: 0;
+        padding-top: 10px;
+      }
+      .col:first-child { border-top: none; padding-top: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .lead-title { font-size: 22px; }
+      .skill-topbar { font-size: 12px; }
+      .back-btn { min-height: 32px; }
+    }
+
+    @media print {
+      body { padding: 0; background: #fff; }
+      .paper {
+        min-height: auto;
+        box-shadow: none;
+        border: 0;
+        padding: 10mm 8mm;
+      }
+      .skill-topbar,
+      .entry-links a,
+      .back-btn { display: none; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="paper" id="paper"></main>
+
+  <script>
+    const fallbackData = {
+      masthead: "NEWSPAPER DAILY SKILL",
+      issue: "Issue #003",
+      date: "2026-05-02",
+      location: "Shenzhen / Remote",
+      deck: "全屏报纸布局：高信息密度 + 深度钻取，覆盖日报、项目、专题三类内容。",
+      quickBrief: ["主线项目推进至 Beta", "今日新增 2 个风险项", "专题复盘文档已整理"],
+      namingRules: {
+        daily: "YYYY-MM-DD",
+        project: "projects/<repo>/index.json",
+        topic: "topic-<slug>-YYYY-MM-DD.json"
+      },
+      lead: {
+        kicker: "Front Page",
+        title: "报纸日报 Skill 进入全屏高密度展示阶段",
+        content: "保持统一报纸视觉，不做模式切换；通过分栏强化信息承载，并支持从词条持续下钻。"
+      },
+      feed: [
+        { title: "日报命名规则已统一", summary: "统一日期命名便于归档检索。", tags: ["daily", "naming"], entryId: "daily-naming" },
+        { title: "项目报目录结构固定", summary: "按仓库名归档，跨项目索引更清晰。", tags: ["project", "repo"], entryId: "project-naming" },
+        { title: "专题词条可链式下钻", summary: "支持主词条到分支词条逐层展开。", tags: ["topic", "deep"], entryId: "deep-guide" }
+      ],
+      briefs: ["新增全屏四栏排版", "增强移动端触达", "补齐场景模板"],
+      agenda: ["完善导出能力", "加入索引首页", "补充模板市场"],
+      metrics: [
+        { label: "今日条目", value: "18" },
+        { label: "项目数", value: "4" },
+        { label: "风险项", value: "2" },
+        { label: "已归档", value: "27" }
+      ],
+      timeline: [
+        { time: "09:30", event: "晨会同步日报模板进展" },
+        { time: "11:00", event: "更新项目风险栏位" },
+        { time: "15:20", event: "专题词条链路校验" },
+        { time: "18:00", event: "输出当日归档" }
+      ],
+      project: {
+        name: "newspaper-daily",
+        milestones: ["全屏报纸UI", "深度路由", "命名规范"],
+        risks: ["深链路径过长", "本地文件权限差异"],
+        nextSteps: ["词条搜索", "多报纸索引"]
+      },
+      profile: {
+        name: "Your Name",
+        role: "Builder / Product Engineer",
+        email: "you@example.com",
+        location: "Shenzhen, CN",
+        links: ["github.com/yourname/newspaper-daily"],
+        skills: ["Layout", "Deep Browsing", "Knowledge Ops"]
+      },
+      scenes: [
+        "个人日报：每日复盘与任务跟进",
+        "项目报：里程碑与风险同步",
+        "专题报：事故复盘/竞品研究"
+      ],
+      stats: {
+        key: "产品主张",
+        value: "先全局扫描，再沿链接钻深。"
+      },
+      entries: [
+        { id: "daily-naming", title: "日报命名规则", content: "采用 YYYY-MM-DD，示例：2026-05-02.json。", links: [{ targetId: "daily-scenes", label: "日报场景" }] },
+        { id: "project-naming", title: "项目报命名规则", content: "目录按仓库名：projects/<repo>/index.json。", links: [{ targetId: "project-scenes", label: "项目报场景" }] },
+        { id: "deep-guide", title: "深度钻取机制", content: "词条跳转 + 面包屑回溯 + 返回上层。", links: [{ targetId: "topic-scenes", label: "专题报场景" }] },
+        { id: "daily-scenes", title: "日报场景", content: "个人日志、团队晨报、值班日报。", links: [] },
+        { id: "project-scenes", title: "项目报场景", content: "里程碑同步、风险追踪、发布简报。", links: [] },
+        { id: "topic-scenes", title: "专题场景", content: "复盘报告、研究汇编、技术选型。", links: [] }
+      ]
+    };
+
+    let appData = null;
+    let historyStack = [];
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function getEntryById(id) {
+      if (!appData || !Array.isArray(appData.entries)) return null;
+      return appData.entries.find(entry => entry.id === id) || null;
+    }
+
+    function parseHashRoute() {
+      const hash = window.location.hash || "";
+      const m = hash.match(/^#\/entry\/([a-zA-Z0-9_-]+)$/);
+      return m ? m[1] : null;
+    }
+
+    function breadcrumbHtml(currentId) {
+      if (!currentId) return `<span>主页</span>`;
+      const items = historyStack.concat(currentId);
+      const crumbs = [`<a href="#">主页</a>`];
+      items.forEach((id, index) => {
+        const entry = getEntryById(id);
+        const title = entry ? entry.title : id;
+        const href = `#/entry/${id}`;
+        const item = index === items.length - 1 ? `<span>${escapeHtml(title)}</span>` : `<a href="${href}">${escapeHtml(title)}</a>`;
+        crumbs.push(`<span class="crumb-sep">></span>${item}`);
+      });
+      return crumbs.join("");
+    }
+
+    function renderTopBar(currentId) {
+      const canBack = historyStack.length > 0;
+      return `
+        <div class="skill-topbar">
+          <div class="crumbs">${breadcrumbHtml(currentId)}</div>
+          <button class="back-btn" id="backBtn" ${canBack ? "" : "disabled"}>返回上层</button>
+        </div>
+      `;
+    }
+
+    function renderMainPage(data) {
+      const feedHtml = (data.feed || []).map(item => {
+        const title = item.entryId ? `<a href="#/entry/${escapeHtml(item.entryId)}">${escapeHtml(item.title)}</a>` : escapeHtml(item.title);
+        return `
+          <article class="feed-item">
+            <h3>${title}</h3>
+            <p>${escapeHtml(item.summary || "")}</p>
+            <div class="tags">${(item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>
+          </article>
+        `;
+      }).join("");
+
+      const quickBriefHtml = (data.quickBrief || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const briefsHtml = (data.briefs || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const agendaHtml = (data.agenda || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const milestones = (data.project?.milestones || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const risks = (data.project?.risks || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const nextSteps = (data.project?.nextSteps || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const metrics = (data.metrics || []).map(x => `<li><strong>${escapeHtml(x.label)}:</strong> ${escapeHtml(x.value)}</li>`).join("");
+      const timeline = (data.timeline || []).map(x => `<li><strong>${escapeHtml(x.time)}</strong> - ${escapeHtml(x.event)}</li>`).join("");
+      const scenes = (data.scenes || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      const skills = (data.profile?.skills || []).map(s => `<span class="tag">${escapeHtml(s)}</span>`).join("");
+      const links = (data.profile?.links || []).map(link => `<div>${escapeHtml(link)}</div>`).join("");
+
+      return `
+        ${renderTopBar(null)}
+        <header class="nameplate">
+          <h1>${escapeHtml(data.masthead || "NEWSPAPER")}</h1>
+          <div class="meta">
+            <span>${escapeHtml(data.issue || "")}</span>
+            <span>${escapeHtml(data.date || "")}</span>
+            <span>${escapeHtml(data.location || "")}</span>
+          </div>
+        </header>
+
+        <section class="deck">${escapeHtml(data.deck || "")}</section>
+
+        <section class="headline-grid">
+          <article class="lead-card">
+            <div class="kicker">${escapeHtml(data.lead?.kicker || "Front Page")}</div>
+            <h2 class="lead-title">${escapeHtml(data.lead?.title || "")}</h2>
+            <p>${escapeHtml(data.lead?.content || "")}</p>
+          </article>
+          <aside class="quick-card">
+            <h3>今日快讯</h3>
+            <ul>${quickBriefHtml}</ul>
+          </aside>
+        </section>
+
+        <section class="layout">
+          <article class="col">
+            <div class="section">
+              <h2>Daily Feed</h2>
+              ${feedHtml}
+            </div>
+            <div class="section box">
+              <h2>今日摘要</h2>
+              <ul class="list">${briefsHtml}</ul>
+            </div>
+          </article>
+
+          <article class="col">
+            <div class="section box">
+              <h2>Naming Rules</h2>
+              <ul class="list">
+                <li><strong>日报:</strong> ${escapeHtml(data.namingRules?.daily || "")}</li>
+                <li><strong>项目报:</strong> ${escapeHtml(data.namingRules?.project || "")}</li>
+                <li><strong>专题报:</strong> ${escapeHtml(data.namingRules?.topic || "")}</li>
+              </ul>
+            </div>
+            <div class="section box">
+              <h2>Project: ${escapeHtml(data.project?.name || "")}</h2>
+              <h3>Milestones</h3><ul class="list">${milestones}</ul>
+              <h3>Risks</h3><ul class="list">${risks}</ul>
+              <h3>Next Steps</h3><ul class="list">${nextSteps}</ul>
+            </div>
+          </article>
+
+          <article class="col">
+            <div class="section box">
+              <h2>Metrics</h2>
+              <ul class="list">${metrics}</ul>
+            </div>
+            <div class="section box">
+              <h2>Timeline</h2>
+              <ul class="list">${timeline}</ul>
+            </div>
+            <div class="section box">
+              <h2>Agenda</h2>
+              <ul class="list">${agendaHtml}</ul>
+            </div>
+          </article>
+
+          <aside class="col">
+            <div class="section profile">
+              <h2>Profile</h2>
+              <div class="avatar">Avatar Placeholder</div>
+              <dl>
+                <dt>Name</dt><dd>${escapeHtml(data.profile?.name || "")}</dd>
+                <dt>Role</dt><dd>${escapeHtml(data.profile?.role || "")}</dd>
+                <dt>Email</dt><dd>${escapeHtml(data.profile?.email || "")}</dd>
+                <dt>Base</dt><dd>${escapeHtml(data.profile?.location || "")}</dd>
+                <dt>Links</dt><dd>${links}</dd>
+              </dl>
+              <div class="tags" style="margin-top:8px;">${skills}</div>
+            </div>
+            <div class="section box">
+              <h2>Scenes</h2>
+              <ul class="list">${scenes}</ul>
+            </div>
+          </aside>
+        </section>
+
+        <footer class="footer-line">
+          <strong>${escapeHtml(data.stats?.key || "")}: ${escapeHtml(data.stats?.value || "")}</strong>
+          <span>Full-screen • High-density • Deep Browsing</span>
+        </footer>
+      `;
+    }
+
+    function renderEntryPage(data, entryId) {
+      const entry = getEntryById(entryId);
+      if (!entry) {
+        return `${renderTopBar(entryId)}<section class="entry-view"><article class="entry-card"><h2>词条不存在</h2><p>未找到 <code>${escapeHtml(entryId)}</code></p><p><a href="#">返回主页</a></p></article></section>`;
+      }
+
+      const linksHtml = (entry.links || []).length
+        ? `<div class="entry-links"><strong>继续深度浏览</strong><ul>${entry.links.map(link => `<li><a href="#/entry/${escapeHtml(link.targetId)}">${escapeHtml(link.label || link.targetId)}</a></li>`).join("")}</ul></div>`
+        : `<div class="entry-links"><strong>当前词条已到最深层。</strong></div>`;
+
+      return `
+        ${renderTopBar(entryId)}
+        <header class="nameplate">
+          <h1>${escapeHtml(data.masthead || "NEWSPAPER")}</h1>
+          <div class="meta"><span>Deep Entry</span><span>${escapeHtml(data.date || "")}</span><span>ID: ${escapeHtml(entry.id)}</span></div>
+        </header>
+        <section class="entry-view">
+          <article class="entry-card">
+            <div class="kicker">Entry</div>
+            <h2 class="lead-title">${escapeHtml(entry.title)}</h2>
+            <p>${escapeHtml(entry.content || "")}</p>
+            ${linksHtml}
+          </article>
+        </section>
+      `;
+    }
+
+    function renderCurrentRoute() {
+      const paper = document.getElementById("paper");
+      const entryId = parseHashRoute();
+      if (entryId) {
+        paper.innerHTML = renderEntryPage(appData, entryId);
+      } else {
+        historyStack = [];
+        paper.innerHTML = renderMainPage(appData);
+      }
+
+      const backBtn = document.getElementById("backBtn");
+      if (backBtn) {
+        backBtn.addEventListener("click", () => {
+          if (!historyStack.length) return;
+          const target = historyStack.pop();
+          window.location.hash = `#/entry/${target}`;
+        });
+      }
+
+      bindNavTracking();
+    }
+
+    function bindNavTracking() {
+      const current = parseHashRoute();
+      document.querySelectorAll('a[href^="#/entry/"]').forEach(anchor => {
+        anchor.addEventListener("click", () => { if (current) historyStack.push(current); });
+      });
+      document.querySelectorAll('a[href="#"]').forEach(anchor => {
+        anchor.addEventListener("click", () => { historyStack = []; });
+      });
+    }
+
+    async function init() {
+      try {
+        const response = await fetch("./examples/mvp.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("No external JSON");
+        appData = await response.json();
+      } catch (_) {
+        appData = fallbackData;
+      }
+      renderCurrentRoute();
+      window.addEventListener("hashchange", renderCurrentRoute);
+    }
+
+    init();
+  </script>
+</body>
+</html>
