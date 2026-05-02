@@ -4,6 +4,10 @@ A Claude skill for generating newspaper-style pages with deep browsing.
 
 It helps turn project updates, daily notes, and topic reports into a full-screen newspaper layout with chained entry navigation.
 
+## Demo
+
+![newspaper-daily-skill demo](assets/demo/demo.png)
+
 ## What this skill provides
 
 - Newspaper-style HTML template
