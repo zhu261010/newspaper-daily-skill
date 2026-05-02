@@ -1,7 +1,7 @@
 # newspaper-daily-skill
 
 <div align="right">
-  <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
+  <a href="README.md">English</a> | <a href="README_zh.md">简体中文</a>
 </div>
 
 一个用于生成“报纸风格页面 + 深度浏览”的 Claude skill。
